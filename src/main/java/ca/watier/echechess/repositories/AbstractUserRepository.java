@@ -38,7 +38,7 @@ public abstract class AbstractUserRepository implements UserRepository {
     }
 
     @Override
-    public final void addNewUserWithRole(@Valid @NotNull User user, @NotNull Roles role) throws UserException {
+    public void addNewUserWithRole(@Valid @NotNull User user, @NotNull Roles role) throws UserException {
         saveOrUpdateUserIfNotExist(user, role);
     }
 

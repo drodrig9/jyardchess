@@ -16,20 +16,33 @@
 
 package ca.watier.echechess.models;
 
+import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
+@Entity
+@Table(name="userInformation")
 public class UserInformation implements Serializable {
     @Serial
     private static final long serialVersionUID = 8210548561304905969L;
-
-    private final List<UUID> listOfGames = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+    private List<UserGame> listOfGames = new ArrayList<>();
+    @Column(name="name")
     private String name;
+    @Column(name="hash")
     private String hash;
+    @Column(name="email")
     private String email;
+    @Column(name="role")
     private Roles role;
+    @Id
+    @GeneratedValue
+    @Column(name="id")
     private int id;
+
+    public UserInformation() {
+    }
 
     public UserInformation(String name, String hash, String email, Roles role) {
         this.name = name;
@@ -62,11 +75,18 @@ public class UserInformation implements Serializable {
     }
 
     public List<UUID> getListOfGames() {
-        return Collections.unmodifiableList(listOfGames);
+
+        List<UUID> result = new ArrayList<UUID>();
+
+        for (UserGame game : this.listOfGames) {
+            result.add(UUID.fromString(game.getUuid()));
+        }
+
+        return Collections.unmodifiableList(result);
     }
 
     public void addGame(UUID game) {
-        listOfGames.add(game);
+        listOfGames.add(new UserGame(game.toString(), this));
     }
 
     public String getRoleAsString() {

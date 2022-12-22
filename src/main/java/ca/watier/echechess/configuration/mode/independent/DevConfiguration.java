@@ -33,9 +33,9 @@ public class DevConfiguration {
     @Autowired
     public DevConfiguration(UserRepository userRepository) {
         try {
-            User admin = new User("admin", "admin", "adminEmail");
-            User adminTwo = new User("admin2", "admin2", "adminEmail2");
-            User observer = new User("observer", "observer", "observerEmail");
+            User admin = new User(0,"admin", "admin", "adminEmail@test.com");
+            User adminTwo = new User(0,"admin2", "admin2", "adminEmail2@test.com");
+            User observer = new User(0,"observer", "observer", "observerEmail@test.com");
 
             userRepository.addNewUserWithRole(admin, Roles.ADMIN);
             userRepository.addNewUserWithRole(adminTwo, Roles.ADMIN);

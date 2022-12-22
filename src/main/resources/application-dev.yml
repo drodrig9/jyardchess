@@ -1,0 +1,44 @@
+#
+#    Copyright 2014 - 2018 Yannick Watier
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+
+app:
+  transport:
+    http:
+      port: 8080
+      redirect-to-https: false
+    https:
+      port: 8443
+  security:
+    bcrypt:
+      work-factor: 4
+spring:
+  profiles:
+    active: @enabled-profile-name@
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      dll-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true

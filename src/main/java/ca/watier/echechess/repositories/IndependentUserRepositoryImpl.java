@@ -19,8 +19,11 @@ package ca.watier.echechess.repositories;
 import ca.watier.echechess.exceptions.UserException;
 import ca.watier.echechess.exceptions.UserNotFoundException;
 import ca.watier.echechess.models.UserInformation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -29,7 +32,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class IndependentUserRepositoryImpl extends AbstractUserRepository {
-    protected final Map<String, UserInformation> users = new HashMap<>(); //FIXME: Synchronize the map!
+
+    @Autowired
+    @Qualifier("userInformationRepository")
+    private UserInformationRepository userInformationRepository;
+
 
     public IndependentUserRepositoryImpl(PasswordEncoder passwordEncoder) {
         super(passwordEncoder);
@@ -37,22 +44,22 @@ public class IndependentUserRepositoryImpl extends AbstractUserRepository {
 
     @Override
     protected void saveOrUpdateUserInformation(@NotNull UserInformation userInformation) {
-        users.put(userInformation.getName(), userInformation);
+        userInformationRepository.save(userInformation);
     }
 
     @Override
     public UserInformation getUserByName(@NotBlank String username) throws UserException {
-        return Optional.ofNullable(users.get(username)).orElseThrow(UserNotFoundException::new);
+
+        UserInformation userInfo = userInformationRepository.findByName(username);
+
+        return Optional.ofNullable(userInfo).orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public List<UserInformation> getUserByEmail(@NotBlank @Email String email) throws UserException {
         Predicate<UserInformation> userCredentialsPredicate = userCredentials -> email.equals(userCredentials.getEmail());
 
-        List<UserInformation> values = users.values()
-                .parallelStream()
-                .filter(userCredentialsPredicate)
-                .collect(Collectors.toList());
+        List<UserInformation> values = userInformationRepository.findByEmail(email);
 
         if (values.isEmpty()) {
             throw new UserNotFoundException();
@@ -66,6 +73,6 @@ public class IndependentUserRepositoryImpl extends AbstractUserRepository {
         UserInformation userByName = getUserByName(username);
         userByName.addGame(game);
 
-        saveOrUpdateUserInformation(userByName);
+        userInformationRepository.save(userByName);
     }
 }

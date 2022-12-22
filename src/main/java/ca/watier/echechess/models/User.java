@@ -18,17 +18,32 @@ package ca.watier.echechess.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax. persistence.Table;
 
+@Entity
+@Table(name="user")
 public class User {
+    @Id
+    @GeneratedValue
+    @Column(name="id")
+    private int id;
     @NotBlank
+    @Column(name="password")
     private String password;
     @NotBlank
     @Email
+    @Column(name="email")
     private String email;
     @NotBlank
+    @Column(name="name")
     private String name;
 
-    public User(String name, String password, String email) {
+    public User(int id, String name, String password, String email) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
@@ -37,6 +52,13 @@ public class User {
     public User() {
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getPassword() {
         return password;
     }
