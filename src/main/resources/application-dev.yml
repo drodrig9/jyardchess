@@ -35,7 +35,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      dll-auto: create
+      dll-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:

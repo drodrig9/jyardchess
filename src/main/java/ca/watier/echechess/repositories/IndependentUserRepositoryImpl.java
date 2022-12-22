@@ -18,6 +18,7 @@ package ca.watier.echechess.repositories;
 
 import ca.watier.echechess.exceptions.UserException;
 import ca.watier.echechess.exceptions.UserNotFoundException;
+import ca.watier.echechess.models.UserGame;
 import ca.watier.echechess.models.UserInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,7 +72,8 @@ public class IndependentUserRepositoryImpl extends AbstractUserRepository {
     @Override
     public void addGameToUser(@NotBlank String username, @NotNull UUID game) throws UserException {
         UserInformation userByName = getUserByName(username);
-        userByName.addGame(game);
+        UserGame userGame = new UserGame(game.toString(), userByName);
+        userByName.addGame(userGame);
 
         userInformationRepository.save(userByName);
     }

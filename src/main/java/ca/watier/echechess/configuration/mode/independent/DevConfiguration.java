@@ -34,11 +34,13 @@ public class DevConfiguration {
     public DevConfiguration(UserRepository userRepository) {
         try {
             User admin = new User(0,"admin", "admin", "adminEmail@test.com");
-            User adminTwo = new User(0,"admin2", "admin2", "adminEmail2@test.com");
+            User white = new User(0,"white", "white", "white@white.com");
+            User black = new User(0, "black", "black", "black@black.com");
             User observer = new User(0,"observer", "observer", "observerEmail@test.com");
 
             userRepository.addNewUserWithRole(admin, Roles.ADMIN);
-            userRepository.addNewUserWithRole(adminTwo, Roles.ADMIN);
+            userRepository.addNewUserWithRole(white, Roles.USER);
+            userRepository.addNewUserWithRole(black, Roles.USER);
             userRepository.addNewUserWithRole(observer, Roles.USER);
         } catch (UserException e) {
             LOGGER.error("Unable to create the default admin user!", e);

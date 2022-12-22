@@ -10,7 +10,7 @@ public class UserGame {
     @Column(name="uuid")
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", nullable=false)
     private UserInformation user;
 

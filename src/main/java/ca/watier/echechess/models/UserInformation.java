@@ -16,6 +16,9 @@
 
 package ca.watier.echechess.models;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,7 +29,8 @@ import java.util.*;
 public class UserInformation implements Serializable {
     @Serial
     private static final long serialVersionUID = 8210548561304905969L;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="user")
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<UserGame> listOfGames = new ArrayList<>();
     @Column(name="name")
     private String name;
@@ -85,8 +89,8 @@ public class UserInformation implements Serializable {
         return Collections.unmodifiableList(result);
     }
 
-    public void addGame(UUID game) {
-        listOfGames.add(new UserGame(game.toString(), this));
+    public void addGame(UserGame game) {
+        listOfGames.add(game);
     }
 
     public String getRoleAsString() {
