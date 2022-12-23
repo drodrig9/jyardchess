@@ -70,8 +70,6 @@ public abstract class AbstractUserRepository implements UserRepository {
             }
 
             saveOrUpdateUserInformation(userInformation);
-        } else {
-            throw new UserAlreadyExistException();
         }
     }
 
